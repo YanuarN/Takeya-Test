@@ -8,7 +8,21 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     use HasFactory;
-    public $timestamps = false;
+    protected $fillable = [
+        'user_id',
+        'title',
+        'content',
+        'published_date',
+        'status',
 
-    
+    ];
+
+    protected $casts = [
+        'published_date' => 'datetime',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
