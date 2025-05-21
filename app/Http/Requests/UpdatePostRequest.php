@@ -22,7 +22,10 @@ class UpdatePostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => 'sometimes|required|string|max:60',
+            'content' => 'sometimes|required|string',
+            'published_date' => 'sometimes|required|date',
+            'save_as_draft' => 'sometimes|boolean'
         ];
     }
 }
