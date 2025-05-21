@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('title');
             $table->text('content');
-            $table->dateTime('published_date');
+            $table->date('published_date');
             $table->enum('status', ['draft', 'scheduled', 'active']);
             $table->timestamps();
         });

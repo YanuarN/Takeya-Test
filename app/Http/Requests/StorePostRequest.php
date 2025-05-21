@@ -23,10 +23,10 @@ class StorePostRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:60',
-            'content' => 'required|string|',
+            'content' => 'required|string',
             'published_date' => 'required|date',
             'save_as_draft' => 'sometimes|boolean',
-            'user_id' => 'required|exists:users,id',
+
         ];
     }
 }

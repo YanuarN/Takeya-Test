@@ -28,8 +28,8 @@
                     <div class="rounded-md border p-5 shadow">
                         <div class="flex items-center gap-2">
                             {{-- Status Badge --}}
-                            @if($post->status === 'published')
-                            <span class="flex-none rounded bg-green-100 px-2 py-1 text-green-800">Published</span>
+                            @if($post->status === 'active')
+                            <span class="flex-none rounded bg-green-100 px-2 py-1 text-green-800">Active</span>
                             @elseif($post->status === 'scheduled')
                             <span class="flex-none rounded bg-yellow-100 px-2 py-1 text-yellow-800">Scheduled</span>
                             @else

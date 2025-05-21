@@ -12,7 +12,7 @@ class PostListController extends Controller
      */
     public function index()
     {
-        $list = Post::where('status', 'published')
+        $list = Post::where('status', 'active')
             ->orderBy('published_date', 'desc')
             ->paginate(50);
         return view('posts.index', compact('list'));

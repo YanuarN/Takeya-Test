@@ -25,7 +25,9 @@ class PostController extends BaseController
      */
     public function index()
     {
-        $posts = Post::where('user_id', Auth::id())->paginate(50);
+        $posts = Post::where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->paginate(50);
 
         return view('home', compact('posts'));
     }
@@ -41,20 +43,20 @@ class PostController extends BaseController
     /**
      * Store a newly created resource in storage.
      */
- public function store(StorePostRequest $request)
+    public function store(StorePostRequest $request)
     {
         $validated = $request->validated();
-        
         $validated['user_id'] = Auth::user()->id;
 
-        // Handle post status based on form submission
-        if ($request->has('save_as_draft')) {
+        if ($request->filled('save_as_draft')) {
             $validated['status'] = 'draft';
         } else {
-            $published_date = new \DateTime($validated['published_date']);
+            $publishedDate = new \DateTime($validated['published_date']);
             $now = new \DateTime();
-            
-            $validated['status'] = ($published_date <= $now) ? 'published' : 'scheduled';
+
+            $validated['status'] = ($publishedDate <= $now)
+                ? 'active'
+                : 'scheduled';
         }
 
         Post::create($validated);
@@ -75,7 +77,7 @@ class PostController extends BaseController
     public function edit(Post $post)
     {
         $this->authorize('update', $post);
-        return view('posts.edit', compact('post', 'users'));
+        return view('posts.edit', compact('post'));
     }
 
     /**
@@ -84,17 +86,17 @@ class PostController extends BaseController
     public function update(UpdatePostRequest $request, Post $post)
     {
         // Authorization is already checked in the UpdatePostRequest
-        
+
         $validated = $request->validated();
-        
+
         // Handle post status based on form submission
         if ($request->has('save_as_draft')) {
             $validated['status'] = 'draft';
         } elseif (isset($validated['published_date'])) {
             $published_date = new \DateTime($validated['published_date']);
             $now = new \DateTime();
-            
-            $validated['status'] = ($published_date <= $now) ? 'published' : 'scheduled';
+
+            $validated['status'] = ($published_date <= $now) ? 'active' : 'scheduled';
         }
 
         $post->update($validated);
@@ -109,9 +111,9 @@ class PostController extends BaseController
     {
         // Check if user is authorized to delete this post
         $this->authorize('delete', $post);
-        
+
         $post->delete();
 
-        return redirect()->route('posts.index')->with('success', 'Post deleted successfully.');
+        return redirect()->route('home')->with('success', 'Post deleted successfully.');
     }
 }
