@@ -25,10 +25,9 @@ class PostController extends BaseController
      */
     public function index()
     {
-        $posts = Post::where('status', 'published')
-            ->paginate(50);
+        $posts = Post::where('user_id', Auth::id())->paginate(50);
 
-        return view('posts.index', compact('posts'));
+        return view('home', compact('posts'));
     }
 
     /**

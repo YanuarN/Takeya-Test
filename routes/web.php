@@ -2,19 +2,11 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\PostListController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
-// Public routes (accessible by guests)
-Route::get('/', function () {
- if (!Auth::check()) {
-        return redirect()->route('login');
-    }
-    return view('home');
-})->name('home');
-
-
-Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+Route::get('/posts', [PostListController::class, 'index'])->name('posts.index');
 
 // Authenticated routes
 Route::middleware('auth')->group(function () {
@@ -24,6 +16,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
     // Post creation
+    Route::get('/', [PostController::class, 'index'])->name('home');
     Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
     Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
