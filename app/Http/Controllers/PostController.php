@@ -18,18 +18,26 @@ class PostController extends BaseController
     public function __construct()
     {
         // Apply auth middleware only to specific methods
-        $this->middleware('auth')->except(['index', 'show']);
+        $this->middleware('auth')->except(['index', 'show', 'publicIndex']);
     }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $posts = Post::where('user_id', Auth::id())
-            ->orderBy('created_at', 'desc')
-            ->paginate(50);
+        if (Auth::check()) {
+            $posts = Post::where('user_id', Auth::id())->paginate(10);
+            return view('home', compact('posts'));
+        }
+        return view('home'); // Tampilkan halaman home untuk guest
+    }
 
-        return view('home', compact('posts'));
+    public function publicIndex()
+    {
+        $posts = Post::where('status', 'active')
+            ->where('published_date', '<=', now())
+            ->paginate(10);
+        return view('posts.index', compact('posts'));
     }
 
     /**

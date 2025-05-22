@@ -26,7 +26,9 @@ class PostTest extends TestCase
     public function test_home_route_requires_authentication()
     {
         $response = $this->get('/');
-        $response->assertRedirect('/login');
+        $response->assertStatus(200);
+        $response->assertSee('Login');
+        $response->assertSee('Register'); 
     }
 
     public function test_authenticated_user_can_access_home()

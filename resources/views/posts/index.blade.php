@@ -7,7 +7,7 @@
 
     <div class="py-12">
         <div class="mx-auto max-w-7xl space-y-8 sm:px-6 lg:px-8">
-            @foreach($list as $post)
+            @foreach($posts as $post)
                 <div class="overflow-hidden bg-white rounded-md border p-5 shadow">
                     <h3><a href="{{ route('posts.show', $post) }}" class="text-blue-500">{{ $post->title }}</a></h3>
                     <div class="mt-4 flex justify-between">
@@ -24,7 +24,7 @@
             @endforeach
 
             <div>
-                {{ $list->links() }}
+                {{ $posts->links() }}
             </div>
         </div>
     </div>
